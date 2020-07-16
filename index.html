@@ -43,6 +43,34 @@
         {{/each}}
     </script>
     <script>
+        $(function() {
+            // 从url中将页码值取出来,通过page值请求发送对应数据,当没有page值时,默认为1
+            let page = new URLSearchParams(location.search).get('page') || 1;
+            // 页码高亮
+            heightLight(page);
+            // 渲染页面数据
+            listPage(page);
+
+            // 给每个页码绑定点击事件
+            $('.pagenation li').on('click', function() {
+                // 获取点击的页码值
+                let index = $(this).attr('data-page');
+                // 此时url中相应的参数也应该发生改变
+                // 运用局部改变url,页面不刷新history.pushState,考虑浏览器版本兼容
+                if ('pushState' in history) {
+                    history.pushState(null, 'title', location.href.split('?')[0] + '?page=' + index);
+                } else {
+                    location.href = '?page=' + index;
+                };
+                // 当前页码高亮
+                heightLight(index);
+                // 渲染页面数据
+                listPage(index);
+
+            })
+
+
+        });
         // 封装页面数据渲染函数
         function listPage(page) {
             $.ajax({
@@ -68,14 +96,14 @@
         // 封装页面页码高亮函数
         function heightLight(page) {
             // 循环所有li,如果当前li的页码值等于page,则就是当前页
-            $('.pagenation li').each(function(page) {
+            $('.pagenation li').each(function() {
                 if ($(this).attr('data-page') == page) {
                     // 当前页码高亮,其他页码去掉高亮
                     $(this).addClass('blue').siblings('li').removeClass('blue');
                 }
             })
 
-        }
+        };
     </script>
 </body>
 
