@@ -65,6 +65,17 @@
                 }
             })
         };
+        // 封装页面页码高亮函数
+        function heightLight(page) {
+            // 循环所有li,如果当前li的页码值等于page,则就是当前页
+            $('.pagenation li').each(function(page) {
+                if ($(this).attr('data-page') == page) {
+                    // 当前页码高亮,其他页码去掉高亮
+                    $(this).addClass('blue').siblings('li').removeClass('blue');
+                }
+            })
+
+        }
     </script>
 </body>
 
