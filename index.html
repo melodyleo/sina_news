@@ -51,6 +51,16 @@
             // 渲染页面数据
             listPage(page);
 
+            // 当url发生改变的时候,获取回退的页码值,渲染响应数据并同步高亮
+            window.addEventListener('popstate', function() {
+                // 获取回退的页码值
+                let page = new URLSearchParams(location.search).get('page') || 1;
+                // 页码高亮
+                heightLight(page);
+                // 渲染页面数据
+                listPage(page);
+            });
+
             // 给每个页码绑定点击事件
             $('.pagenation li').on('click', function() {
                 // 获取点击的页码值
