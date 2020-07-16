@@ -30,7 +30,41 @@
     <script src="js/jQuery.js"></script>
     <!-- 引入arttemplate模板 -->
     <script src="js/template-web.js"></script>
+    <!-- 创建模板字符串 -->
+    <script type="text/html" id="list_Tpl">
+        {{each data}}
+        <li>
+            <a href="">
+                <img src="{{$value.img_url}}" alt="{{$value.short_intro}}">
+            </a>
+            <p>{{$value.short_name}}</p>
+            <p>{{$value.intro}}</p>
+        </li>
+        {{/each}}
+    </script>
     <script>
+        // 封装页面数据渲染函数
+        function listPage(page) {
+            $.ajax({
+                // 接口地址页码值实参代入
+                url: 'https://photo.sina.cn/aj/index?page=' + page + '&cate=recommend',
+                // 请求方式
+                dataType: 'jsonp',
+                // 请求发送前显示载入框
+                beforeSend: function() {
+                    $('.mask').show();
+                },
+                // 请求成功后返回数据并在页面上渲染
+                success: function(data) {
+                    // 将list的页面内容与模板字符绑定
+                    $('.list').html(template('list_Tpl', data));
+                },
+                // 请求完成后隐藏载入框
+                complete: function() {
+                    $('.mask').hide();
+                }
+            })
+        };
     </script>
 </body>
 
